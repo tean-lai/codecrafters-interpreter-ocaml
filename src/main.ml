@@ -1,12 +1,11 @@
-type token = LEFT_PAREN | RIGHT_PAREN
-(* | LEFT_BRACE
-   | RIGHT_BRACE
-   | COMMA
-   | DOT
-   | MINUS
-   | PLUS
-   | SEMICOLON
-   | STAR *)
+type token = LEFT_PAREN | RIGHT_PAREN | LEFT_BRACE | RIGHT_BRACE
+(*
+    | COMMA
+    | DOT
+    | MINUS
+    | PLUS
+    | SEMICOLON
+    | STAR *)
 
 let scan s =
   let rec helper seq acc =
@@ -16,6 +15,8 @@ let scan s =
         match h with
         | '(' -> helper t (LEFT_PAREN :: acc)
         | ')' -> helper t (RIGHT_PAREN :: acc)
+        | '{' -> helper t (LEFT_BRACE :: acc)
+        | '}' -> helper t (RIGHT_BRACE :: acc)
         | _ -> failwith "shouldn't happen")
   in
   helper (String.to_seq s) []
@@ -27,6 +28,12 @@ let rec pprint_tokens = function
       pprint_tokens t
   | RIGHT_PAREN :: t ->
       print_endline "RIGHT_PAREN ) null";
+      pprint_tokens t
+  | LEFT_BRACE :: t ->
+      print_endline "LEFT_BRACE { null";
+      pprint_tokens t
+  | RIGHT_BRACE :: t ->
+      print_endline "RIGHT_BRACE } null";
       pprint_tokens t
 (* | _ -> failwith "todo" *)
 
