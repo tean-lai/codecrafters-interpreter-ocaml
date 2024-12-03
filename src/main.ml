@@ -9,15 +9,16 @@ type token = LEFT_PAREN | RIGHT_PAREN
    | STAR *)
 
 let scan s =
-  let rec helper i acc =
-    if i = String.length s then List.rev acc
-    else
-      match s.[i] with
-      | '(' -> helper (i + 1) (LEFT_PAREN :: acc)
-      | ')' -> helper (i + 1) (RIGHT_PAREN :: acc)
-      | _ -> failwith "shouldn't happen"
+  let rec helper seq acc =
+    match seq () with
+    | Seq.Nil -> List.rev acc
+    | Seq.Cons (h, t) -> (
+        match h with
+        | '(' -> helper t (LEFT_PAREN :: acc)
+        | ')' -> helper t (RIGHT_PAREN :: acc)
+        | _ -> failwith "shouldn't happen")
   in
-  helper 0 []
+  helper (String.to_seq s) []
 
 let rec pprint_tokens = function
   | [] -> print_endline "EOF  null"
