@@ -26,7 +26,9 @@ let scan s =
         | '+' -> helper t (PLUS :: acc)
         | '-' -> helper t (MINUS :: acc)
         | ';' -> helper t (SEMICOLON :: acc)
-        | _ -> failwith "shouldn't happen")
+        | _ ->
+            Printf.printf "[line 1] Error: Unexpected character: %c\n" h;
+            helper t acc)
   in
   helper (String.to_seq s) []
 
