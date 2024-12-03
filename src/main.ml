@@ -1,11 +1,14 @@
-type token = LEFT_PAREN | RIGHT_PAREN | LEFT_BRACE | RIGHT_BRACE
-(*
-    | COMMA
-    | DOT
-    | MINUS
-    | PLUS
-    | SEMICOLON
-    | STAR *)
+type token =
+  | LEFT_PAREN
+  | RIGHT_PAREN
+  | LEFT_BRACE
+  | RIGHT_BRACE
+  | COMMA
+  | DOT
+  | MINUS
+  | PLUS
+  | SEMICOLON
+  | STAR
 
 let scan s =
   let rec helper seq acc =
@@ -17,6 +20,12 @@ let scan s =
         | ')' -> helper t (RIGHT_PAREN :: acc)
         | '{' -> helper t (LEFT_BRACE :: acc)
         | '}' -> helper t (RIGHT_BRACE :: acc)
+        | '.' -> helper t (DOT :: acc)
+        | ',' -> helper t (COMMA :: acc)
+        | '*' -> helper t (STAR :: acc)
+        | '+' -> helper t (PLUS :: acc)
+        | '-' -> helper t (MINUS :: acc)
+        | ';' -> helper t (SEMICOLON :: acc)
         | _ -> failwith "shouldn't happen")
   in
   helper (String.to_seq s) []
@@ -35,6 +44,25 @@ let rec pprint_tokens = function
   | RIGHT_BRACE :: t ->
       print_endline "RIGHT_BRACE } null";
       pprint_tokens t
+  | COMMA :: t ->
+      print_endline "COMMA , null";
+      pprint_tokens t
+  | DOT :: t ->
+      print_endline "DOT . null";
+      pprint_tokens t
+  | STAR :: t ->
+      print_endline "STAR * null";
+      pprint_tokens t
+  | PLUS :: t ->
+      print_endline "PLUS + null";
+      pprint_tokens t
+  | MINUS :: t ->
+      print_endline "MINUS - null";
+      pprint_tokens t
+  | SEMICOLON :: t ->
+      print_endline "SEMICOLON ; null";
+      pprint_tokens t
+
 (* | _ -> failwith "todo" *)
 
 let () =
