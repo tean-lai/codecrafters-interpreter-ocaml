@@ -40,41 +40,41 @@ let scan s =
   in
   helper (String.to_seq s) [] 1
 
-let eprint_endline s =
-  Printf.eprintf s;
-  Printf.eprintf "\n"
+(* let eprint_endline s =
+   Printf.eprintf s;
+   Printf.eprintf "\n" *)
 
 let rec pprint_tokens = function
-  | [] -> eprint_endline "EOF  null"
+  | [] -> print_endline "EOF  null"
   | LEFT_PAREN :: t ->
-      eprint_endline "LEFT_PAREN ( null";
+      print_endline "LEFT_PAREN ( null";
       pprint_tokens t
   | RIGHT_PAREN :: t ->
-      eprint_endline "RIGHT_PAREN ) null";
+      print_endline "RIGHT_PAREN ) null";
       pprint_tokens t
   | LEFT_BRACE :: t ->
-      eprint_endline "LEFT_BRACE { null";
+      print_endline "LEFT_BRACE { null";
       pprint_tokens t
   | RIGHT_BRACE :: t ->
-      eprint_endline "RIGHT_BRACE } null";
+      print_endline "RIGHT_BRACE } null";
       pprint_tokens t
   | COMMA :: t ->
-      eprint_endline "COMMA , null";
+      print_endline "COMMA , null";
       pprint_tokens t
   | DOT :: t ->
-      eprint_endline "DOT . null";
+      print_endline "DOT . null";
       pprint_tokens t
   | STAR :: t ->
-      eprint_endline "STAR * null";
+      print_endline "STAR * null";
       pprint_tokens t
   | PLUS :: t ->
-      eprint_endline "PLUS + null";
+      print_endline "PLUS + null";
       pprint_tokens t
   | MINUS :: t ->
-      eprint_endline "MINUS - null";
+      print_endline "MINUS - null";
       pprint_tokens t
   | SEMICOLON :: t ->
-      eprint_endline "SEMICOLON ; null";
+      print_endline "SEMICOLON ; null";
       pprint_tokens t
 
 (* | _ -> failwith "todo" *)
