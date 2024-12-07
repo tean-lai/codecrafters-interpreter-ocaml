@@ -11,6 +11,8 @@ type token =
   | STAR
   | EQUAL
   | EQUAL_EQUAL
+  | BANG
+  | BANG_EQUAL
 
 let had_error = ref false
 
@@ -36,13 +38,16 @@ let scan s =
         | '+' -> helper t (PLUS :: acc) line
         | '-' -> helper t (MINUS :: acc) line
         | ';' -> helper t (SEMICOLON :: acc) line
-        | '=' ->
-            let equal, next =
-              match t () with
-              | Seq.Cons (th, tt) when th = '=' -> (EQUAL_EQUAL, tt)
-              | _ -> (EQUAL, t)
-            in
-            helper next (equal :: acc) line
+        | '=' -> (
+            match t () with
+            | Seq.Cons (th, tt) when th = '=' ->
+                helper tt (EQUAL_EQUAL :: acc) line
+            | _ -> helper t (EQUAL :: acc) line)
+        | '!' -> (
+            match t () with
+            | Seq.Cons (th, tt) when th = '=' ->
+                helper tt (BANG_EQUAL :: acc) line
+            | _ -> helper t (BANG :: acc) line)
         | _ ->
             error line ("Unexpected character: " ^ String.make 1 h);
             helper t acc line)
@@ -90,6 +95,12 @@ let rec pprint_tokens = function
       pprint_tokens t
   | EQUAL_EQUAL :: t ->
       print_endline "EQUAL_EQUAL == null";
+      pprint_tokens t
+  | BANG :: t ->
+      print_endline "BANG ! null";
+      pprint_tokens t
+  | BANG_EQUAL :: t ->
+      print_endline "BANG_EQUAL != null";
       pprint_tokens t
 
 (* | _ -> failwith "todo" *)
