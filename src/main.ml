@@ -9,6 +9,8 @@ type token =
   | PLUS
   | SEMICOLON
   | STAR
+  | EQUAL
+  | EQUAL_EQUAL
 
 let had_error = ref false
 
@@ -34,6 +36,14 @@ let scan s =
         | '+' -> helper t (PLUS :: acc) line
         | '-' -> helper t (MINUS :: acc) line
         | ';' -> helper t (SEMICOLON :: acc) line
+        | '=' ->
+            let equal, next =
+              match t () with
+              | Seq.Nil -> (EQUAL, t)
+              | Seq.Cons (th, tt) ->
+                  if th = '=' then (EQUAL_EQUAL, tt) else (EQUAL, t)
+            in
+            helper next (equal :: acc) line
         | _ ->
             error line ("Unexpected character: " ^ String.make 1 h);
             helper t acc line)
@@ -75,6 +85,12 @@ let rec pprint_tokens = function
       pprint_tokens t
   | SEMICOLON :: t ->
       print_endline "SEMICOLON ; null";
+      pprint_tokens t
+  | EQUAL :: t ->
+      print_endline "EQUAL = null";
+      pprint_tokens t
+  | EQUAL_EQUAL :: t ->
+      print_endline "EQUAL_EQUAL == null";
       pprint_tokens t
 
 (* | _ -> failwith "todo" *)
