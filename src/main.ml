@@ -39,9 +39,8 @@ let scan s =
         | '=' ->
             let equal, next =
               match t () with
-              | Seq.Nil -> (EQUAL, t)
-              | Seq.Cons (th, tt) ->
-                  if th = '=' then (EQUAL_EQUAL, tt) else (EQUAL, t)
+              | Seq.Cons (th, tt) when th = '=' -> (EQUAL_EQUAL, tt)
+              | _ -> (EQUAL, t)
             in
             helper next (equal :: acc) line
         | _ ->
