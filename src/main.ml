@@ -40,13 +40,11 @@ let scan s =
         | ';' -> helper t (SEMICOLON :: acc) line
         | '=' -> (
             match t () with
-            | Seq.Cons (th, tt) when th = '=' ->
-                helper tt (EQUAL_EQUAL :: acc) line
+            | Seq.Cons ('=', tt) -> helper tt (EQUAL_EQUAL :: acc) line
             | _ -> helper t (EQUAL :: acc) line)
         | '!' -> (
             match t () with
-            | Seq.Cons (th, tt) when th = '=' ->
-                helper tt (BANG_EQUAL :: acc) line
+            | Seq.Cons ('=', tt) -> helper tt (BANG_EQUAL :: acc) line
             | _ -> helper t (BANG :: acc) line)
         | _ ->
             error line ("Unexpected character: " ^ String.make 1 h);
