@@ -13,6 +13,10 @@ type token =
   | EQUAL_EQUAL
   | BANG
   | BANG_EQUAL
+  | LESS
+  | LESS_EQUAL
+  | GREATER
+  | GREATER_EQUAL
 
 let had_error = ref false
 
@@ -46,6 +50,14 @@ let scan s =
             match t () with
             | Seq.Cons ('=', tt) -> helper tt (BANG_EQUAL :: acc) line
             | _ -> helper t (BANG :: acc) line)
+        | '<' -> (
+            match t () with
+            | Seq.Cons ('=', tt) -> helper tt (LESS_EQUAL :: acc) line
+            | _ -> helper t (LESS :: acc) line)
+        | '>' -> (
+            match t () with
+            | Seq.Cons ('=', tt) -> helper tt (GREATER_EQUAL :: acc) line
+            | _ -> helper t (GREATER :: acc) line)
         | _ ->
             error line ("Unexpected character: " ^ String.make 1 h);
             helper t acc line)
@@ -99,6 +111,18 @@ let rec pprint_tokens = function
       pprint_tokens t
   | BANG_EQUAL :: t ->
       print_endline "BANG_EQUAL != null";
+      pprint_tokens t
+  | LESS :: t ->
+      print_endline "LESS < null";
+      pprint_tokens t
+  | LESS_EQUAL :: t ->
+      print_endline "LESS_EQUAL <= null";
+      pprint_tokens t
+  | GREATER :: t ->
+      print_endline "GREATER > null";
+      pprint_tokens t
+  | GREATER_EQUAL :: t ->
+      print_endline "GREATER_EQUAL >= null";
       pprint_tokens t
 
 (* | _ -> failwith "todo" *)
